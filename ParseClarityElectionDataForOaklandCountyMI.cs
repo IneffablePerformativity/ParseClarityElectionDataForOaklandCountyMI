@@ -104,7 +104,16 @@
  * I wonder, should I include POTUS race in the measure of republicanism?
  * That might smooth better than only averaging the contested lower races.
  * 
- * 
+ * VERSION TWO:
+ * building on itself:
+ * github.com/IneffablePerformativity/ParseClarityElectionDataForOaklandCountyMI
+ * and these prior successes:
+ * github.com/IneffablePerformativity/ParseClarityElectionDataForStateOfGeorgia
+ * github.com/IneffablePerformativity/ParseClarityElectionDataForStateOfColorado
+ * ADDED VALUE: RE-SORTING DEMONSTRATED A HUGE NEW CLUE IN BIDEN BONUS.
+ *
+ *
+ * also note, I manually compress final image at tinypng.com 
  * 
  * On to the task...
  */
@@ -167,9 +176,9 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 
 		static string gitHubRepositoryShortened = "https://bit.ly/3m0ftyP";
 		
-		static string finalConclusion = "YES, FRAUD: 1.5% of count of non-straight-party ballots was added to Joe Biden across the board.";
+		static string finalConclusion = "YES, FRAUD: BONUS TO BIDEN = 1%. HUGE CLUE: SPIKY -> SMOOTH WHERE BIDEN VOTE > 50%.";
 
-		static bool discardStraightPartyVotes = true; // affects bonus, csv, more than plot
+		static bool discardStraightPartyVotes = false; // affects bonus, csv, more than plot
 
 		
 		// Grains are smallest locality, perhaps a Ward, county, precinct...
@@ -201,6 +210,9 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 
 		
 		// outputting phase
+		
+		
+		static string orderingPrinciple = "ascending Republicanism"; // edit code below to modify.
 
 		
 		static string DateTimeStr = DateTime.Now.ToString("yyyyMMddTHHmmss");
@@ -304,6 +316,7 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 
 			OutputThePlotResults();
 
+			OutputGrainContestChoiceParty();
 		}
 
 		
@@ -654,7 +667,41 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 				// as Original Milwaukee article says shifts proportional to Republicanism.
 				
 				int ppmOrdering = ppmRepOther;
-
+				
+				// However, I am curious about the spikiness in Biden Bonus.
+				// Let's try that, and parameterize the caption per choice:
+				
+				// yes, these make valuable alternate plots for visualization.
+				
+				// comment out if not desired, and finally:
+				{
+					// No. Using bonuses obscures the area-to-edge delta.
+					{
+						ppmOrdering = bonusToBiden;
+						orderingPrinciple = "ascending BonusToBiden";
+					}
+					{
+						ppmOrdering = bonusToTrump;
+						orderingPrinciple = "ascending BonusToTrump";
+					}
+					// this gave me an AHA: Spikes in biden bonus
+					// may vary with unplotted straight-party votes
+					// OMG! Huge insight into the FRUAD PROOF:
+					// when include the straight-party votes,
+					// then spikyness of Biden Bonus ceases
+					// where Biden Votes exceeds 50% !!!!
+					{
+						ppmOrdering = ppmDemOther;
+						orderingPrinciple = "ascending ppmDemOther";
+					}
+					// Check that insight again here: PERFECT!
+					{
+						ppmOrdering = ppmDemPotus;
+						orderingPrinciple = "ascending ppmDemPotus";
+						orderingPrinciple = "ascending Biden Votes (including straight-party votes)";
+					}
+				}
+				
 				sb.Clear();
 				// field[0]
 				sb.Append(ppmOrdering.ToString().PadLeft(7)); sb.Append(',');
@@ -698,6 +745,8 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 			// Wow. I call this evidence tight: 1.5% of totalBallots was added to Joe across the entire county!
 			// The Democrat Vote PPM Shift (Potus Dem minus Other Dems) in all 506 localities of Oakland County Michigan is: mean=15140, stdDev=2531.
 			
+			string possibleConclusionText = "";
+			
 			// Do once for Biden
 			{
 				int sum = 0;
@@ -721,6 +770,7 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 				say("Across the " + BidenBonuses.Count + " localities of " + LocationBeingStudied
 				    + ", the BIDEN vote differs from other DEMOCRAT races as: mean = "
 				    + sign + dmean + "% of total votes in locality, with standard deviation = " + dstdDev + "%.");
+				possibleConclusionText += " BIDEN BONUS = " + sign + dmean + "%, StdDev " + dstdDev + ";";
 			}
 			
 			// Do once for Trump
@@ -746,7 +796,9 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 				say("Across the " + TrumpBonuses.Count + " localities of " + LocationBeingStudied
 				    + ", the TRUMP vote differs from other REPUBLICAN races as: mean = "
 				    + sign + dmean + "% of total votes in locality, with standard deviation = " + dstdDev + "%.");
+				possibleConclusionText += " TRUMP BONUS = " + sign + dmean + "%, StdDev " + dstdDev;
 			}
+			say("possibleConclusionText" + possibleConclusionText);
 		}
 		
 		
@@ -949,7 +1001,7 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 				gBmp.DrawString(TrumpLabel, smallFont, blackTextBrush, (imageSizeX-gBmp.MeasureString(TrumpLabel, smallFont).Width) / 2, YTrumpLabel);
 
 				int yAboveLabel = nBorder + 95 * plotSizeY / 100 - smallFontHeight / 2;
-				string AboveLabel = "Localities (\"" + GrainTag + "\") are plotted <-- left to right --> by ascending Republicanism.";
+				string AboveLabel = "Localities (\"" + GrainTag + "\") are plotted <-- left to right --> by " + orderingPrinciple + ".";
 				gBmp.DrawString(AboveLabel, smallFont, blackTextBrush, (imageSizeX-gBmp.MeasureString(AboveLabel, smallFont).Width) / 2, yAboveLabel);
 
 				int yGitHubLabel = nBorder + 103 * plotSizeY / 100 - smallFontHeight / 2;
@@ -959,6 +1011,56 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 			}
 
 			bmp.Save(pngFilePath, ImageFormat.Png); // can overwrite old png
+		}
+
+
+
+		// I need to review the constitution of contests:
+		// (Does each voter see 1 Senate + 1 Congress)?
+		// These would affect the divisor (2) for OTHER votes.
+
+		// results: I see multiple Representatives per locality,
+		// but they have different "District #" so I conclude
+		// every voter sees one Representativ;
+		// There is exactly 1 Senate race in Colorado.
+		// So keeping the Divisor (2) to average cats.
+		
+		// Also for parity of REP:DEM in case some contest is unopposed!
+		
+		static void OutputGrainContestChoiceParty()
+		{
+			// oops, never saved names in each object!
+			// Wake up! no need: name IS the dict key.
+
+			say("search for any UNCONTESTED marks below.");
+			foreach(KeyValuePair<string,Grain> kvp1 in grains)
+			{
+				say("");
+				say("==========");
+				say("locality: " + kvp1.Key);
+				foreach(KeyValuePair<string,Contest> kvp2 in kvp1.Value.contests)
+				{
+					say("");
+					say("contest: " + kvp2.Key);
+					bool hasRep = false;
+					bool hasDem = false;
+					foreach(KeyValuePair<string,Choice> kvp3 in kvp2.Value.choices)
+					{
+						switch(kvp3.Value.party)
+						{
+							case "REP":
+								hasRep = true;
+								break;
+							case "DEM":
+								hasDem = true;
+								break;
+						}
+						say("choice (" + kvp3.Value.party + "): " + kvp3.Key);
+					}
+					if( ! (hasRep && hasDem))
+						say("*** UNCONTESTED: " + kvp2.Key);
+				}
+			}
 		}
 		
 	}
