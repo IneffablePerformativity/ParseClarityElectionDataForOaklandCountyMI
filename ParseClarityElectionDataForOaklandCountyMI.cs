@@ -9,11 +9,18 @@
  * This work is published from: United States."
  * 
  * This work is offered as per license: http://creativecommons.org/publicdomain/zero/1.0/
+ *
+ * 
+ * This application has mined out and presents solid proof of 2020 POTUS ELECTION FRAUD here:
+ * LocationBeingStudied = "OaklandCountyMI"
  * 
  * 
- * This application has mined out and presents solid proof of 2020 POTUS ELECTION FRAUD in named locality.
- * WOW!!! BLAZING HOT Michigan Fraud Results: I call this evidence tight: 1.5% of totalBallots was added to Joe across the entire county!
- * The Democrat Vote PPM Shift (Potus Dem minus Other Dems) in all 506 localities of Oakland County Michigan is: mean=15140, stdDev=2531.
+ * This work can easily be tweaked for other locations that use CLARITY election system.
+ * String constants matching Contest names must change;
+ * How to distinguish Party may change.
+ * GrainTag may change.
+ * XML hierarchy may change
+ * 
  * 
  * Goal: Parsing the "Clarity" type of 2020 Election data for Oakland County Michigan.
  * via https://www.oakgov.com/clerkrod/elections/Pages/default.aspx
@@ -45,7 +52,7 @@
  * 
  * Georgia did NOT give me TotalBallots cast per county.
  * So I approximated it as the sum of all POTUS choices.
- * 
+ * Oakland County MI gave me TotalBallots in many ways.
  * 
  * Georgia had 4 vote types ~(MailIn/ElectionDay/Advance/Provisional).
  * Oakland County MI has only 2 vote types (under Choice):
@@ -105,8 +112,8 @@
 
 using System;
 using System.Collections.Generic;
-//using System.Drawing; // Must add a reference to System.Drawing.dll
-//using System.Drawing.Imaging; // for ImageFormat
+using System.Drawing; // Must add a reference to System.Drawing.dll
+using System.Drawing.Imaging; // for ImageFormat
 using System.IO;
 using System.Net;
 using System.Text;
@@ -118,7 +125,7 @@ using System.Xml;
 namespace ParseClarityElectionDataForOaklandGrainMI
 {
 	
-	class Choice // Candidate
+	class Choice // AKA Candidate
 	{
 		public Choice(string party)
 		{
@@ -128,12 +135,12 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 		public int votes = 0;
 	}
 	
-	class Contest // Race
+	class Contest // AKA Race
 	{
 		public Dictionary<string,Choice> choices = new Dictionary<string,Choice>();
 	}
 	
-	class Grain // Precinct, County, Ward, etc.
+	class Grain // AKA Precinct, County, Ward, etc.
 	{
 		public Grain(string locality)
 		{
@@ -143,7 +150,7 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 		public Dictionary<string,Contest> contests = new Dictionary<string,Contest>();
 	}
 	
-	class ShrodingersCat
+	class ShrodingersCat // needed to make a reference to N sums, which one unknown yet
 	{
 		public int rep;
 		public int dem;
@@ -152,31 +159,59 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 
 	class Program
 	{
-		static Dictionary<string,Grain> grains = new Dictionary<string,Grain>();
+		static string LocationBeingStudied = "OaklandCountyMI";
+
+		static string LocationBeingStudiedClearly = "Oakland County, Michigan";
+
+		static string gitHubRepositoryURL = "https://github.com/IneffablePerformativity/ParseClarityElectionDataForOaklandCountyMI";
+
+		static string gitHubRepositoryShortened = "https://bit.ly/3m0ftyP";
 		
-		// inputting phase
+		static string finalConclusion = "YES, FRAUD: 1.5% of count of non-straight-party ballots was added to Joe Biden across the board.";
+
+		static bool discardStraightPartyVotes = true; // affects bonus, csv, more than plot
+
 		
-		static string projectDirectoryPath = @"C:\A\SharpDevelop\ParseClarityElectionDataForOaklandCountyMI";
-		static string inputXmlFileName = "OaklandCountyMI-detail.xml"; // sitting there
+		// Grains are smallest locality, perhaps a Ward, county, precinct...
 
 		const string GrainTag = "Precinct"; // XML tag name e.g., Precinct, County, Ward, etc.
-		
 
+		
+		
+		// inputting phase
+
+		
+		static string projectDirectoryPath = @"C:\A\SharpDevelop\ParseClarityElectionDataFor" + LocationBeingStudied;
+		
+		static string inputXmlFileName = LocationBeingStudied + "-detail.xml"; // sitting there
+
+		// This is the top-level store of all grains, held by locality name
+		
+		static Dictionary<string,Grain> grains = new Dictionary<string,Grain>();
+
+		
 		// Analysis Phase
+
+		
+		// Some versions can foreknow ballotsCast, e.g., in input data or a website.
+		// Some versions must compute ballotsCast, e.g., as sum of all POTUS votes.
+		// Just for a self-check; Not needed in computations:
 		
 		const int ballotsCast = 775379; // Empirically, from this current input file
 
 		
-		
 		// outputting phase
 
+		
 		static string DateTimeStr = DateTime.Now.ToString("yyyyMMddTHHmmss");
 		
 		// Log outputs exploratory, debug data:
-		static string logFilePath = @"C:\A\" + DateTimeStr + "_ParseClarityElectionDataForOaklandGrainMI_log.txt";
+
+		static string logFilePath = @"C:\A\" + DateTimeStr + "_ParseClarityElectionDataFor" + LocationBeingStudied + "_log.txt";
 		static TextWriter twLog = null;
 
 		// a favorite output idiom
+
 		static void say(string msg)
 		{
 			if(twLog != null)
@@ -186,7 +221,8 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 		}
 
 		// Csv outputs voting data to visualize in Excel
-		static string csvFilePath = @"C:\A\" + DateTimeStr + "_ParseClarityElectionDataForOaklandGrainMI_csv.csv";
+
+		static string csvFilePath = @"C:\A\" + DateTimeStr + "_ParseClarityElectionDataFor" + LocationBeingStudied + "_csv.csv";
 		static TextWriter twCsv = null;
 
 		static void csv(string msg)
@@ -195,11 +231,27 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 				twCsv.WriteLine(msg);
 		}
 
+		// this cleans csv output text
+
 		static Regex regexNonAlnum = new Regex(@"\W", RegexOptions.Compiled);
+		
+		static char [] caComma = { ',' };
 
+		
 		// Png outputs my own bitmap for fine grained control of data display:
-		// static string pngFilePath = @"C:\A\" + DateTimeStr + "_ParseClarityElectionDataForOaklandGrainMI_png.png";
 
+		static string pngFilePath = @"C:\A\" + DateTimeStr + "_ParseClarityElectionDataFor" + LocationBeingStudied + "_png.png";
+
+		
+		// Affects pen width choices!
+
+		const int imageSizeX = 1920 * 2;
+		const int imageSizeY = 1080 * 2;
+		const int nBorder = 80 * 2; // keep mod 10 == 0
+		
+		const int plotSizeX = imageSizeX - 2 * nBorder;
+		const int plotSizeY = imageSizeY - 2 * nBorder + 1; // so plotSizeY mod 10 == 1 for 11 graticules
+		
 		
 		public static void Main(string[] args)
 		{
@@ -216,14 +268,17 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 			Console.Write("Press any key to continue . . . ");
 			Console.ReadKey(true);
 		}
+
 		
 		static void doit()
 		{
 			// Phase one -- Inputting data
 			
+			say("discardStraightPartyVotes = " + discardStraightPartyVotes);
+			
 			inputDetailXmlFile();
 
-			// diagnosticDump();
+			// diagnosticDump(); // optional, not needed
 			
 
 			// Phase two -- Analyze data
@@ -233,10 +288,22 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 			
 			// Phase three -- Output data
 			
+			// I scale [0.0% to 1.0%] into ppm = Parts Per Million [0 to 1000000].
+			// all ppm are computed with divisor = totalBallots in grain locality.
+			
+			// "Bonus to Biden" will plot as mountains above the central graticule.
+			// "Taken from Trump" will plot as valleys below the central graticule.
+			
+			// How does one express all that clearly in column header text?
 			if(twCsv != null)
-				csv("ppmOrdering,ppmRepPotus,ppmDemPotus,1M-ppmDemPotus,ppmRepOther,ppmDemOther,1M-ppmDemOther,ppmRepShift,1M-ppmDemShift,totalBallots,locality");
+				csv("ordering,ppmRepPotus,ppmDemPotus,1M-ppmDemPotus,ppmRepOther,ppmDemOther,1M-ppmDemOther,BonusToTrump,BonusToBiden,totalBallots,locality");
 
 			OutputTheCsvResults();
+			
+			OutputTheStatistics();
+
+			OutputThePlotResults();
+
 		}
 
 		
@@ -247,7 +314,7 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 
 			XmlNode root = doc.DocumentElement;
 			
-			// recursive descent
+			// XML descent
 			
 			XmlNodeList xnlContests = root.SelectNodes("Contest");
 			foreach(XmlNode xnContest in xnlContests)
@@ -259,17 +326,24 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 				
 				switch(contest)
 				{
-						// OMIT THIS LINE THAT JUST DILUTES ANy SYMPTOM:
-						// case "Straight Party Ticket":
+					case "Straight Party Ticket":
+						if(discardStraightPartyVotes)
+							continue;
+						break; // Else, Process this category
+
+						// sum of POTUS votes == total ballots in Oakland County:
 					case "Electors of President and Vice-President of the United States":
+						// sum of US Senator votes == total ballots in Oakland County:
 					case "United States Senator":
+						// sum of these 4 REP races == total ballots in Oakland County:
 					case "Representative in Congress 8th District":
 					case "Representative in Congress 9th District":
 					case "Representative in Congress 11th District":
 					case "Representative in Congress 14th District":
-						break;
+						break; // Process this category
+
 					default:
-						continue;
+						continue; // discard all others
 				}
 
 				XmlNodeList xnlChoices = xnContest.SelectNodes("Choice");
@@ -279,17 +353,6 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 					string party = "";
 					try { party = xnChoice.Attributes["party"].Value; } catch(Exception) { };
 
-
-					// Don't leave out the other choices,
-					// need them for total votes in grain
-					//switch(party)
-					//{
-					//	case "DEM":
-					//	case "REP":
-					//		break;
-					//	default:
-					//		continue;
-					//}
 
 					// 1. Real votes
 					XmlNodeList xnlGrains = xnChoice.SelectNodes("VoteType/" + GrainTag);
@@ -326,7 +389,7 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 			
 			int nVotes = int.Parse(votes);
 			
-			// recursive ascent
+			// XML ascent
 			
 			Grain thisGrain = null;
 			if(grains.ContainsKey(grain))
@@ -350,6 +413,7 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 			
 			// Wow. Another easy peasy.
 		}
+
 		
 		/*
 		 * I think having made the effort to parse and count Residual counts,
@@ -389,6 +453,7 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 		 * 164088 + 137999 + 293394  + 179898 = 775379, matches ballotsCast = 775379
 		 */
 
+		
 		static void diagnosticDump()
 		{
 			// because of the inverted order of grain<-->contest, sum up:
@@ -440,20 +505,30 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 		
 
 		// This will collect output lines to sort for csv.
-		// I will re-run the pq if I choose to draw graph.
+		// After sort, re-parse column data to draw graph.
 		
-		static List<string> pq = new List<string>(); // "priority queue" I like to call it
+		static List<string> csvLines = new List<string>();
 
 		
 		// My God! Thank You, My God!
 		// The Excel plot reveals a VERY STRAIGHT LINE
 		// revealing the algorithm favoring Joe Biden.
 		// So that I must see and report mean, std dev.
+		//
+		// That 1.5% was in the OaklandCountyMI data.
+		// for generality, output both statistics.
+		//
+		// (But MilwaukeeCountyWI had a sloping line.)
+		// But output these as a signed percentage:
 
-		static List<int> DemShifts = new List<int>();
+		// These hold the counts for mean, std dev:
+		
+		static List<int> BidenBonuses = new List<int>();
+		static List<int> TrumpBonuses = new List<int>();
 		
 		
-		// probably a lot like the diagnostic dump loop
+		// Isaiah 41:15 “Behold, I will make thee a new sharp threshing instrument having teeth: thou shalt thresh the mountains, and beat them small, and shalt make the hills as chaff.”
+		
 		
 		static void LetsRaceTowardTheDesideratum()
 		{
@@ -462,6 +537,7 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 			// Grains are plotted along the Abscissa, the X axis.
 			// Each outer loop can prepare one csv/plot data out.
 			// That is because I already learned the ballotsCast.
+			// No rather, compute a total ballots for each grain.
 
 			// I will learn contest long before I learn party.
 
@@ -512,6 +588,8 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 					}
 
 					// Inner loop splits up 2 choice types: (REP vs. DEM).
+					
+					// In Oakland County MI data, these came as XML attributes:
 
 					foreach(KeyValuePair<string,Choice>kvp3 in contest.choices)
 					{
@@ -535,8 +613,9 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 
 				// build an output line
 				
-				//fyi: csv("ppmOrdering,ppmRepPotus,ppmDemPotus,1M-ppmDemPotus,ppmRepOther,ppmDemOther,1M-ppmDemOther,ppmRepShift,1M-ppmDemShift,totalBallots,locality");
 				
+				// fyi: csv("ordering,ppmRepPotus,ppmDemPotus,1M-ppmDemPotus,ppmRepOther,ppmDemOther,1M-ppmDemOther,BonusToTrump,BonusToBiden,totalBallots,locality");
+
 				// sum up VOTES:
 				int RepPotus = four[0].rep + four[1].rep;
 				int DemPotus = four[0].dem + four[1].dem;
@@ -553,64 +632,334 @@ namespace ParseClarityElectionDataForOaklandGrainMI
 				int ppmRepOther = (int)(1000000L * RepOther / totalBallots);
 				int ppmDemOther = (int)(1000000L * DemOther / totalBallots);
 				
-				int ppmRepShift = ppmRepPotus - ppmRepOther;
-				int ppmDemShift = ppmDemPotus - ppmDemOther;
+				int ppmTrumpBonus = ppmRepPotus - ppmRepOther;
+				int ppmBidenBonus = ppmDemPotus - ppmDemOther;
 				
-				DemShifts.Add(ppmDemShift); // for later mean, std dev
+				// these are signed, around zero, but scaled in PPM
 
+				BidenBonuses.Add(ppmBidenBonus); // for later mean, std dev
+				TrumpBonuses.Add(ppmTrumpBonus); // for later mean, std dev
+
+				// Revise the shift==steal metrics for clarity:
+				// "Taken From Trump" sounds nice but confuses.
+				
+				// on PPM, plot full scale of 1M = 100%
+				// desire bonus plot full scale = +/-5%
+				// so scale up by 10.
+				
+				int bonusToTrump = 500000 + 10 * ppmTrumpBonus; // both plot up==positive
+				int bonusToBiden = 500000 + 10 * ppmBidenBonus; // both plot up==positive
+				
 				// This ordering method follows (only Other, of only Rep) no Dem, no Potus,
 				// as Original Milwaukee article says shifts proportional to Republicanism.
 				
 				int ppmOrdering = ppmRepOther;
 
 				sb.Clear();
+				// field[0]
 				sb.Append(ppmOrdering.ToString().PadLeft(7)); sb.Append(',');
 
+				// field[1]
 				sb.Append(ppmRepPotus.ToString().PadLeft(7)); sb.Append(',');
+				// field[2]
 				sb.Append(ppmDemPotus.ToString().PadLeft(7)); sb.Append(',');
 				sb.Append((1000000 - ppmDemPotus).ToString().PadLeft(7)); sb.Append(',');
 
+				// field[4]
 				sb.Append(ppmRepOther.ToString().PadLeft(7)); sb.Append(',');
+				// field[5]
 				sb.Append(ppmDemOther.ToString().PadLeft(7)); sb.Append(',');
 				sb.Append((1000000 - ppmDemOther).ToString().PadLeft(7)); sb.Append(',');
 
-				sb.Append(ppmRepShift.ToString().PadLeft(7)); sb.Append(',');
-				sb.Append((1000000 - ppmDemShift).ToString().PadLeft(7)); sb.Append(',');
+				// field[7]
+				sb.Append(bonusToTrump.ToString().PadLeft(7)); sb.Append(',');
+				// field[8]
+				sb.Append(bonusToBiden.ToString().PadLeft(7)); sb.Append(',');
 
 				sb.Append(totalBallots.ToString().PadLeft(7)); sb.Append(',');
 
 				sb.Append(regexNonAlnum.Replace(grain.locality, ""));
 
-				pq.Add(sb.ToString());
+				csvLines.Add(sb.ToString());
 			}
 		}
 		
 		static void OutputTheCsvResults()
 		{
-			pq.Sort();
+			csvLines.Sort();
 			
-			foreach(string line in pq)
+			foreach(string line in csvLines)
 				csv(line);
-			
-			// Special output needed for OaklandCountyMI:
-			int sum = 0;
-			foreach(int i in DemShifts)
-				sum += i;
-			double mean = (double)sum / DemShifts.Count;
-			
-			double sumSquares = 0.0;
-			foreach(int i in DemShifts)
-				sumSquares += (mean-i)*(mean-i);
-			double stdDev = Math.Sqrt(sumSquares / DemShifts.Count);
-			
-			int imean = (int)Math.Round(mean);
-			int istdDev = (int)Math.Round(stdDev);
-			
-			say("The Democrat Vote PPM Shift (Potus Dem minus Other Dems) in all " + DemShifts.Count + " localities of Oakland County Michigan is: mean=" + imean + ", stdDev=" + istdDev + ".");
+		}
+		
+		static void OutputTheStatistics()
+		{
 
 			// Wow. I call this evidence tight: 1.5% of totalBallots was added to Joe across the entire county!
 			// The Democrat Vote PPM Shift (Potus Dem minus Other Dems) in all 506 localities of Oakland County Michigan is: mean=15140, stdDev=2531.
+			
+			// Do once for Biden
+			{
+				int sum = 0;
+				foreach(int i in BidenBonuses) // signed around zero, scaled*1M
+					sum += i;
+				double mean = (double)sum / BidenBonuses.Count;
+				
+				double sumSquares = 0.0;
+				foreach(int i in BidenBonuses)
+					sumSquares += (mean-i)*(mean-i);
+				double stdDev = Math.Sqrt(sumSquares / BidenBonuses.Count);
+				
+				// divide by 100 first to keep 2 dec plcs in pct
+				int imean = (int)Math.Round(mean/100);
+				string sign = (imean<0?"MINUS ":"PLUS ");
+				imean = Math.Abs(imean);
+				int istdDev = (int)Math.Round(stdDev/100);
+				double dmean = imean / 100.0; // now as Percentage
+				double dstdDev = istdDev / 100.0; // now as Percentage
 
+				say("Across the " + BidenBonuses.Count + " localities of " + LocationBeingStudied
+				    + ", the BIDEN vote differs from other DEMOCRAT races as: mean = "
+				    + sign + dmean + "% of total votes in locality, with standard deviation = " + dstdDev + "%.");
+			}
+			
+			// Do once for Trump
+			{
+				int sum = 0;
+				foreach(int i in TrumpBonuses) // signed around zero, scaled*1M
+					sum += i;
+				double mean = (double)sum / TrumpBonuses.Count;
+				
+				double sumSquares = 0.0;
+				foreach(int i in TrumpBonuses)
+					sumSquares += (mean-i)*(mean-i);
+				double stdDev = Math.Sqrt(sumSquares / TrumpBonuses.Count);
+				
+				// divide by 100 first to keep 2 dec plcs in pct
+				int imean = (int)Math.Round(mean/100);
+				string sign = (imean<0?"MINUS ":"PLUS ");
+				imean = Math.Abs(imean);
+				int istdDev = (int)Math.Round(stdDev/100);
+				double dmean = imean / 100.0; // now as Percentage
+				double dstdDev = istdDev / 100.0; // now as Percentage
+				
+				say("Across the " + TrumpBonuses.Count + " localities of " + LocationBeingStudied
+				    + ", the TRUMP vote differs from other REPUBLICAN races as: mean = "
+				    + sign + dmean + "% of total votes in locality, with standard deviation = " + dstdDev + "%.");
+			}
 		}
+		
+		
+		// Habakkuk 2:2 "And the Lord answered me, and said, Write the vision, and make it plain upon tables, that he may run that readeth it."
+
+		
+		static void OutputThePlotResults()
+		{
+			Bitmap bmp = new Bitmap(imageSizeX, imageSizeY);
+			bmp.SetResolution(92, 92);
+			Graphics gBmp = Graphics.FromImage(bmp);
+			
+			Brush whiteBrush = new SolidBrush(Color.White);
+			gBmp.FillRectangle(whiteBrush, 0, 0, imageSizeX, imageSizeY); // x,y,w,h
+
+			// again:csv("ordering,ppmRepPotus,ppmDemPotus,1M-ppmDemPotus,ppmRepOther,ppmDemOther,1M-ppmDemOther,BonusToTrump,BonusToBiden,totalBallots,locality");
+			
+			// goggled the official party colors.
+			// Rep Red
+			//RGB: 233 20 29
+			//HSL: 357° 84% 50%
+			//Hex: #E9141D
+			// Dem Blue
+			//RGB: 0 21 188
+			//HSL: 233° 100% 37%
+			//Hex: #0015BC
+
+			const int votesLineWidth = 12; // at 1920 * 2
+			Pen redTrumpLinePen = new Pen(Color.FromArgb(233, 20, 29), votesLineWidth);
+			Pen blueBidenLinePen = new Pen(Color.FromArgb(0, 21, 188), votesLineWidth);
+
+			const int bonusLineWidth = 4; // at 1920 * 2
+			Pen GreenBidenBonusLinePen = new Pen(Color.Green, bonusLineWidth);
+			Pen orangeTrumpBonusLinePen = new Pen(Color.Orange, bonusLineWidth);
+
+			Pen blackGraticulePen = new Pen(Color.Black, 8); // at 1920* 2
+			Pen blackGatCenterLinePen = new Pen(Color.Black, 16); // at 1920* 2
+
+			// Wiki: Pastels in HSV have high value and low to intermediate saturation.
+			// Made my color conversions at https://serennu.com/colour/hsltorgb.php
+			//Trying Pastel HSL: 357 40 90
+			//HSL: 357° 40% 90%
+			//RGB: 240 219 220
+			//Hex: #F0DBDC
+			//Trying Pastel HSL: 233 40 90
+			//HSL: 233° 40% 90%
+			//RGB: 219 222 240
+			//Hex: #DBDEF0
+			
+			Brush redRepublicansBrush = new SolidBrush(Color.FromArgb(240, 219, 220));
+			Brush blueDemocratsBrush = new SolidBrush(Color.FromArgb(219, 222, 240));
+
+			// plot the areas
+
+			{
+				// gBmp.FillRectangle(); // brush,x,y,w,h
+
+				// on first app, I had worried over proportional widths and pixel boundaries.
+				// today, will I even let extreme edge data go under the vertical graticules.
+				float barWidth = (float)plotSizeX / csvLines.Count;
+				float leftOfBar = nBorder;
+
+				// factor in the border offsets ahead of loop
+				int zeroForDescendingY = nBorder;
+				//int zeroForBonusesY = (1 + 5*plotSizeY/10) + nBorder;
+				int zeroForAscendingY = plotSizeY + nBorder;
+
+				foreach(string line in csvLines)
+				{
+					string[] fields = line.Split(caComma);
+					int ppmRepOther = int.Parse(fields[4]);
+					int ppmDemOther = int.Parse(fields[5]);
+					float RepHeight = (float)plotSizeY * ppmRepOther / 1000000;
+					float DemHeight = (float)plotSizeY * ppmDemOther / 1000000;
+					gBmp.FillRectangle(blueDemocratsBrush, leftOfBar, zeroForDescendingY, barWidth, DemHeight);
+					gBmp.FillRectangle(redRepublicansBrush, leftOfBar, zeroForAscendingY - RepHeight, barWidth, RepHeight);
+					
+					leftOfBar += barWidth;
+				}
+			}
+
+			// draw graticule
+
+			{
+
+				// Draw the eleven 10% horizontal graticule lines:
+				for(int y = 1; y <= plotSizeY; y += plotSizeY/10)
+				{
+					if(y == 1 + 5*plotSizeY/10)
+						gBmp.DrawLine(blackGatCenterLinePen, nBorder, nBorder + y, nBorder + plotSizeX, nBorder + y); // x1, y1, x2, y2
+					else
+						gBmp.DrawLine(blackGraticulePen, nBorder, nBorder + y, nBorder + plotSizeX, nBorder + y); // x1, y1, x2, y2
+				}
+
+				// Draw two vertical boundary lines
+				for(int x = 0; x <= plotSizeX; x += plotSizeX)
+				{
+					// looked like high water trouser legs. Fudging + 1:
+					gBmp.DrawLine(blackGraticulePen, nBorder + x, nBorder, nBorder + x, nBorder + plotSizeY + 1); // x1, y1, x2, y2
+				}
+			}
+			
+			// plot the lines
+			
+			{
+				// on first app, I had worried over proportional widths and pixel boundaries.
+				// today, will I even let extreme edge data go under the vertical graticules.
+				float barWidth = (float)plotSizeX / csvLines.Count;
+				float leftOfBar = nBorder;
+
+				// factor in the border offsets ahead of loop
+				int zeroForDescendingY = nBorder;
+				int zeroForBonusesY = (1 + 5*plotSizeY/10) + nBorder;
+				int zeroForAscendingY = plotSizeY + nBorder;
+
+				float priorMidBarX = 0;
+				float priorTrumpY = 0;
+				float priorBidenY = 0;
+				float priorTrumpBonusY = 0;
+				float priorBidenBonusY = 0;
+				
+				foreach(string line in csvLines)
+				{
+					string[] fields = line.Split(caComma);
+					int ppmRepPotus = int.Parse(fields[1]);
+					int ppmDemPotus = int.Parse(fields[2]);
+					int bonusToTrump = int.Parse(fields[7]) - 500000; // was scaled up *10 and shifted +500K
+					int bonusToBiden = int.Parse(fields[8]) - 500000; // was scaled up *10 and shifted +500K
+					float RepHeight = (float)plotSizeY * ppmRepPotus / 1000000;
+					float DemHeight = (float)plotSizeY * ppmDemPotus / 1000000;
+					float trumpY = zeroForAscendingY - RepHeight;
+					float bidenY = zeroForDescendingY + DemHeight;
+					// minus here, as +bonus plots upward, bu Windows GDI +y is downward:
+					float trumpBonusY = zeroForBonusesY - (float)plotSizeY * bonusToTrump / 1000000;
+					float bidenBonusY = zeroForBonusesY - (float)plotSizeY * bonusToBiden / 1000000;
+					float midBarX = leftOfBar + barWidth / 2;
+
+					if(priorMidBarX != 0)
+					{
+						// draw bonuses first
+						gBmp.DrawLine(GreenBidenBonusLinePen, priorMidBarX, priorBidenBonusY, midBarX, bidenBonusY); // pen, x1, y1, x2, y2
+						gBmp.DrawLine(orangeTrumpBonusLinePen, priorMidBarX, priorTrumpBonusY, midBarX, trumpBonusY); // pen, x1, y1, x2, y2
+
+						// draw votes second on top
+						gBmp.DrawLine(blueBidenLinePen, priorMidBarX, priorBidenY, midBarX, bidenY); // pen, x1, y1, x2, y2
+						gBmp.DrawLine(redTrumpLinePen, priorMidBarX, priorTrumpY, midBarX, trumpY); // pen, x1, y1, x2, y2
+
+					}
+					
+					priorMidBarX = midBarX;
+					priorTrumpY = trumpY;
+					priorBidenY = bidenY;
+					priorTrumpBonusY = trumpBonusY;
+					priorBidenBonusY = bidenBonusY;
+					
+					leftOfBar += barWidth;
+				}
+			}
+			
+			// draw the legends
+
+			{
+				// Finally, Make some captions right over the bar graphs
+				
+				// don't write right on top of ( i * plotSizeY / 10) = graticules.
+
+				Brush blackTextBrush = new SolidBrush(Color.Black);
+				
+				Font bigFont = new Font("Arial Black", 80);
+				int bigFontHeight = (int)bigFont.GetHeight(gBmp);
+
+				Font smallFont = new Font("Arial Black", 40);
+				int smallFontHeight = (int)smallFont.GetHeight(gBmp);
+
+				Font unambiguousFont = new Font("Consolas", 35);
+				int unambiguousFontHeight = (int)smallFont.GetHeight(gBmp);
+
+				int yHeadine = nBorder + 5 * plotSizeY / 100 - bigFontHeight / 2;
+				string Headine = "\"CLARITY\" election data for " + LocationBeingStudiedClearly;
+				gBmp.DrawString(Headine, bigFont, blackTextBrush, (imageSizeX-gBmp.MeasureString(Headine, bigFont).Width) / 2, yHeadine);
+
+				int yMeaningLabel = nBorder + 15 * plotSizeY / 100 - smallFontHeight / 2;
+				string MeaningLabel = "Republicans are RED, Democrats are BLUE; Lines show % POTUS votes; Areas show % average NON-POTUS votes.";
+				gBmp.DrawString(MeaningLabel, smallFont, blackTextBrush, (imageSizeX-gBmp.MeasureString(MeaningLabel, smallFont).Width) / 2, yMeaningLabel);
+
+				int yFraudLabel = nBorder + 25 * plotSizeY / 100 - smallFontHeight / 2;
+				string FraudLabel = "ELECTION FRAUD CLUE IS WHENEVER RED AND/OR BLUE LINES SYSTEMATICALLY DO NOT TRACK THEIR AREA EDGE.";
+				gBmp.DrawString(FraudLabel, smallFont, blackTextBrush, (imageSizeX-gBmp.MeasureString(FraudLabel, smallFont).Width) / 2, yFraudLabel);
+
+				int YQEDLabel = nBorder + 65 * plotSizeY / 100 - smallFontHeight / 2;
+				string QEDLabel = "Conclusion: " + finalConclusion;
+				gBmp.DrawString(QEDLabel, smallFont, blackTextBrush, (imageSizeX-gBmp.MeasureString(QEDLabel, smallFont).Width) / 2, YQEDLabel);
+				
+				int YBidenLabel = nBorder + 75 * plotSizeY / 100 - smallFontHeight / 2;
+				string BidenLabel = "The GREEN line amplifies any % Bonus To BIDEN, above (or loss below) fat center graticule. Full scale = +/-5%";
+				gBmp.DrawString(BidenLabel, smallFont, blackTextBrush, (imageSizeX-gBmp.MeasureString(BidenLabel, smallFont).Width) / 2, YBidenLabel);
+				
+				int YTrumpLabel = nBorder + 85 * plotSizeY / 100 - smallFontHeight / 2;
+				string TrumpLabel = "The ORANGE line amplifies any % Bonus To TRUMP, above (or loss below) fat center graticule. Full scale = +/-5%";
+				gBmp.DrawString(TrumpLabel, smallFont, blackTextBrush, (imageSizeX-gBmp.MeasureString(TrumpLabel, smallFont).Width) / 2, YTrumpLabel);
+
+				int yAboveLabel = nBorder + 95 * plotSizeY / 100 - smallFontHeight / 2;
+				string AboveLabel = "Localities (\"" + GrainTag + "\") are plotted <-- left to right --> by ascending Republicanism.";
+				gBmp.DrawString(AboveLabel, smallFont, blackTextBrush, (imageSizeX-gBmp.MeasureString(AboveLabel, smallFont).Width) / 2, yAboveLabel);
+
+				int yGitHubLabel = nBorder + 103 * plotSizeY / 100 - smallFontHeight / 2;
+				string GitHubLabel = "Open Source: " + gitHubRepositoryShortened + " = " + gitHubRepositoryURL;
+				gBmp.DrawString(GitHubLabel, unambiguousFont, blackTextBrush, (imageSizeX-gBmp.MeasureString(GitHubLabel, unambiguousFont).Width) / 2, yGitHubLabel);
+
+			}
+
+			bmp.Save(pngFilePath, ImageFormat.Png); // can overwrite old png
+		}
+		
 	}
 }

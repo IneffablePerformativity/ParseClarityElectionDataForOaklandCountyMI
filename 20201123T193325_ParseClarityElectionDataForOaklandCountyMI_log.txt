@@ -1,0 +1,3 @@
+discardStraightPartyVotes = True
+Across the 506 localities of OaklandCountyMI, the BIDEN vote differs from other DEMOCRAT races as: mean = PLUS 1.51% of total votes in locality, with standard deviation = 0.25%.
+Across the 506 localities of OaklandCountyMI, the TRUMP vote differs from other REPUBLICAN races as: mean = PLUS 0.33% of total votes in locality, with standard deviation = 0.31%.
