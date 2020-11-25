@@ -1,6 +1,15 @@
 # ParseClarityElectionDataForOaklandCountyMI
 This application has mined out and presents solid proof of 2020 POTUS ELECTION FRAUD in named locality.
 
+
+2020-11-25 Let me clarify the interpretation of those new fraud clue results seen in AnalysisOfClarityElectionDataForOaklandCountyMI-tiny.png:
+
+As I have been GABing: Extreme Proof: Oakland County Michigan #2020POTUS #ElectionFraud algorithm changes for Biden Votes < 50% and > 50%.
+
+See how the green line, the Biden Bonus, averaging +1%, is smooth on the right side of the plot in precincts where Biden was ahead, starting just after where the blue line representing Biden Votes crosses over the fat middle line representing 50% of all votes cast, but the Biden Bonus and a corresponding Trump Theft (the orange line) have spikes in many of those precincts where Biden is behind, on the left side of the graph? I think the fraud algorithm was trying to pull Biden up in those losing precincts, in addition to generally supplying the very flat 1% Biden Bonus across all precincts.
+
+
+
 /*
  * ParseClarityElectionDataForOaklandCountyMI.cs
  *
