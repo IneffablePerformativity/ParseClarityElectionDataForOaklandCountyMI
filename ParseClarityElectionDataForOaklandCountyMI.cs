@@ -161,7 +161,7 @@ namespace ParseClarityElectionDataForOaklandCountyMI
 		// ====================
 
 		
-		// Literal strings for a switch case
+		// Literal strings for N.B.: *TWO*switch()s, qv.
 
 
 		// if applicable, adds REP or DEM count to all contests
@@ -374,8 +374,19 @@ namespace ParseClarityElectionDataForOaklandCountyMI
 				foreach(XmlNode xnChoice in xnlChoices)
 				{
 					string choice = xnChoice.Attributes["text"].Value;
+
+					// This worked in the Oakland County verion of app:
+
 					string party = "";
+
 					try { party = xnChoice.Attributes["party"].Value; } catch(Exception) { };
+					
+					// This is the code for Georgia, came from inspecting choice string:
+					
+					//if(choice.Contains("(Rep)"))
+					//	party = "REP";
+					//if(choice.Contains("(Dem)"))
+					//	party = "DEM";
 
 
 					// 1. Real votes
@@ -547,7 +558,6 @@ namespace ParseClarityElectionDataForOaklandCountyMI
 		// revealing the algorithm favoring Joe Biden.
 		// So that I must see and report mean, std dev.
 		//
-		// That 1.5% was in the OaklandCountyMI data.
 		// for generality, output both statistics.
 		//
 		// (But MilwaukeeCountyWI had a sloping line.)
@@ -681,6 +691,54 @@ namespace ParseClarityElectionDataForOaklandCountyMI
 				{
 					totalBallots = RepPotus + DemPotus; // omit  + EtcPotus
 					
+				}
+				
+				// New problem in GEORGIA:
+				// The blue bars plotted way over 100%, falling outside the graph.
+				// Fix so if non-POTUS total is larger than POTUS total, use that.
+				{
+					switch(howOther) // 1=average of Sen+Rep, 2=Sen, 3=Rep
+					{
+						case 1:
+							// compute average totals:
+							int AvgTotals = 0;
+							AvgTotals += thisFour[0].rep + thisFour[2].rep;
+							AvgTotals += thisFour[0].dem + thisFour[2].dem;
+							AvgTotals += thisFour[0].etc + thisFour[2].etc;
+							AvgTotals += thisFour[0].rep + thisFour[3].rep;
+							AvgTotals += thisFour[0].dem + thisFour[3].dem;
+							AvgTotals += thisFour[0].etc + thisFour[3].etc;
+							AvgTotals /= 2;
+							
+							if(totalBallots < AvgTotals)
+							{
+								totalBallots = AvgTotals;
+							}
+							break;
+						case 2:
+							// compute senate totals:
+							int senTotals = 0;
+							senTotals += thisFour[0].rep + thisFour[2].rep;
+							senTotals += thisFour[0].dem + thisFour[2].dem;
+							senTotals += thisFour[0].etc + thisFour[2].etc;
+							if(totalBallots < senTotals)
+							{
+								totalBallots = senTotals;
+							}
+							break;
+						case 3:
+							// compute house totals:
+							int RepTotals = 0;
+							RepTotals += thisFour[0].rep + thisFour[3].rep;
+							RepTotals += thisFour[0].dem + thisFour[3].dem;
+							RepTotals += thisFour[0].etc + thisFour[3].etc;
+							
+							if(totalBallots < RepTotals)
+							{
+								totalBallots = RepTotals;
+							}
+							break;
+					}
 				}
 
 				// prevent divide by zero:
@@ -937,6 +995,7 @@ namespace ParseClarityElectionDataForOaklandCountyMI
 			Pen orangeTrumpBonusLinePen = new Pen(Color.Orange, bonusLineWidth);
 
 			Pen blackXPen = new Pen(Color.Black, 3); // at 1920* 2
+			Pen whiteXPen = new Pen(Color.White, 3); // at 1920* 2
 			Pen blackGraticulePen = new Pen(Color.Black, 6); // at 1920* 2
 			Pen blackFatCenterLinePen = new Pen(Color.Black, 16); // at 1920* 2
 
@@ -1141,6 +1200,21 @@ namespace ParseClarityElectionDataForOaklandCountyMI
 						// mention where it happened
 						say("MARKING AN X ON [" + fields[10] + "] for shifting " + netShiftOfVotes + " votes.");
 					}
+
+					// just for balance, make white X's for such a "Trump Theft".
+					// I have no counter or sum for these, visual plot mark only.
+
+					if(bonusToBiden < -XMarksTheSpotThreshold
+					   && bonusToTrump > XMarksTheSpotThreshold)
+					{
+						
+						int ppmBonusToTrump = (int)((int.Parse(fields[7]) - 500000) / (double)scaleFactor);
+						int ppmBonusToBiden = (int)((int.Parse(fields[8]) - 500000) / (double)scaleFactor);
+						int netShiftOfVotes = (ppmBonusToBiden-ppmBonusToTrump) * grainBallots / 1000000;
+						gBmp.DrawLine(whiteXPen, midBarX1, bidenBonusY, midBarX2, trumpBonusY); // pen, x1, y1, x2, y2
+						gBmp.DrawLine(whiteXPen, midBarX2, bidenBonusY, midBarX1, trumpBonusY); // pen, x1, y1, x2, y2
+					}
+
 					
 					leftOfBar += barWidth;
 				}
