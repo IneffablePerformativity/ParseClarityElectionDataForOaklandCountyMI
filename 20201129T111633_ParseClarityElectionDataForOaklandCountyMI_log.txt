@@ -1,0 +1,149 @@
+OMITTING where totalBallots == 0 in Novi Township, Precinct 1
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Royal Oak Township, Precinct 1
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Royal Oak Township, Precinct 2
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Farmington Hills, Precinct 17
+OMITTING where totalBallots == 0 in Fenton, Precinct 2
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Ferndale, Precinct 1
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Ferndale, Precinct 2
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Ferndale, Precinct 3
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Ferndale, Precinct 5
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Ferndale, Precinct 8
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Ferndale, Precinct 9
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Huntington Woods, Precinct 1
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Huntington Woods, Precinct 2
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Huntington Woods, Precinct 4
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Huntington Woods, Precinct 5
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Lathrup Village, Precinct 1
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Lathrup Village, Precinct 2
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 1
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 5
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 7
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 8
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 9
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 10
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 11
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 12
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 13
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 14
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 15
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Oak Park, Precinct 16
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pleasant Ridge, Precinct 1
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 1
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 2
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 3
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 5
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 6
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 9
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 14
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 15
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 16
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 19
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 20
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Pontiac, Precinct 21
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 1
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 2
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 3
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 4
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 6
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 7
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 8
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 9
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 10
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 11
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 12
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 15
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 16
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 18
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 19
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 20
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 21
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 22
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 23
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 24
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 25
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 26
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 27
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 28
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 29
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 30
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 31
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 32
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 33
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 35
+OMITTING where ppmRepPotus < someMinimumRepublicanism in Southfield, Precinct 36
+Across the 433 localities of OaklandCountyMI, the BIDEN vote differs from other DEMOCRAT races as: mean = PLUS 1.36% of total votes in locality, with standard deviation = 0.98%.
+Across the 433 localities of OaklandCountyMI, the TRUMP vote differs from other REPUBLICAN races as: mean = MINUS 0.77% of total votes in locality, with standard deviation = 1.43%.
+possibleConclusionText BIDEN BONUS = PLUS 1.36%, StdDev 0.98; TRUMP BONUS = MINUS 0.77%, StdDev 1.43
+MARKING AN X ON [FarmingtonPrecinct5] for shifting 57 votes.
+MARKING AN X ON [OaklandTownshipPrecinct8] for shifting 88 votes.
+MARKING AN X ON [BloomfieldTownshipPrecinct7] for shifting 119 votes.
+MARKING AN X ON [RochesterHillsPrecinct19] for shifting 73 votes.
+MARKING AN X ON [TroyPrecinct18] for shifting 87 votes.
+MARKING AN X ON [WestBloomfieldTownshipPrecinct8] for shifting 139 votes.
+MARKING AN X ON [RoyalOakPrecinct9] for shifting 148 votes.
+MARKING AN X ON [OaklandTownshipPrecinct4] for shifting 94 votes.
+MARKING AN X ON [NoviPrecinct23] for shifting 92 votes.
+MARKING AN X ON [NoviPrecinct18] for shifting 112 votes.
+MARKING AN X ON [RoyalOakPrecinct22] for shifting 122 votes.
+MARKING AN X ON [BirminghamPrecinct8] for shifting 111 votes.
+MARKING AN X ON [BerkleyPrecinct7] for shifting 105 votes.
+MARKING AN X ON [OaklandTownshipPrecinct3] for shifting 74 votes.
+MARKING AN X ON [SouthfieldTownshipPrecinct5] for shifting 86 votes.
+MARKING AN X ON [BloomfieldTownshipPrecinct17] for shifting 137 votes.
+MARKING AN X ON [LyonTownshipPrecinct8] for shifting 32 votes.
+MARKING AN X ON [SouthfieldTownshipPrecinct8] for shifting 90 votes.
+MARKING AN X ON [RochesterHillsPrecinct10] for shifting 85 votes.
+MARKING AN X ON [RoyalOakPrecinct13] for shifting 119 votes.
+MARKING AN X ON [RochesterPrecinct1] for shifting 108 votes.
+MARKING AN X ON [LyonTownshipPrecinct9] for shifting 131 votes.
+MARKING AN X ON [RochesterPrecinct5] for shifting 122 votes.
+MARKING AN X ON [RochesterHillsPrecinct18] for shifting 89 votes.
+MARKING AN X ON [BloomfieldTownshipPrecinct12] for shifting 122 votes.
+MARKING AN X ON [RoyalOakPrecinct11] for shifting 102 votes.
+MARKING AN X ON [HuntingtonWoodsPrecinct3] for shifting 72 votes.
+MARKING AN X ON [LyonTownshipPrecinct6] for shifting 213 votes.
+MARKING AN X ON [OrionTownshipPrecinct8] for shifting 112 votes.
+MARKING AN X ON [OaklandTownshipPrecinct5] for shifting 134 votes.
+MARKING AN X ON [NoviPrecinct24] for shifting 118 votes.
+MARKING AN X ON [RoyalOakPrecinct12] for shifting 113 votes.
+MARKING AN X ON [NoviPrecinct25] for shifting 80 votes.
+MARKING AN X ON [SouthfieldTownshipPrecinct1] for shifting 60 votes.
+MARKING AN X ON [RoyalOakPrecinct1] for shifting 131 votes.
+MARKING AN X ON [RoyalOakPrecinct10] for shifting 127 votes.
+MARKING AN X ON [TroyPrecinct17] for shifting 146 votes.
+MARKING AN X ON [BloomfieldTownshipPrecinct5] for shifting 152 votes.
+MARKING AN X ON [BloomfieldTownshipPrecinct9] for shifting 159 votes.
+MARKING AN X ON [TroyPrecinct29] for shifting 161 votes.
+MARKING AN X ON [RochesterHillsPrecinct22] for shifting 92 votes.
+MARKING AN X ON [NorthvillePrecinct2] for shifting 187 votes.
+MARKING AN X ON [FarmingtonPrecinct1] for shifting 73 votes.
+MARKING AN X ON [SouthfieldTownshipPrecinct7] for shifting 77 votes.
+MARKING AN X ON [OaklandTownshipPrecinct7] for shifting 193 votes.
+MARKING AN X ON [NoviPrecinct17] for shifting 120 votes.
+MARKING AN X ON [BirminghamPrecinct3] for shifting 124 votes.
+MARKING AN X ON [BloomfieldTownshipPrecinct6] for shifting 150 votes.
+MARKING AN X ON [TroyPrecinct7] for shifting 133 votes.
+MARKING AN X ON [SouthfieldTownshipPrecinct9] for shifting 96 votes.
+MARKING AN X ON [BloomfieldTownshipPrecinct14] for shifting 122 votes.
+MARKING AN X ON [BirminghamPrecinct9] for shifting 109 votes.
+MARKING AN X ON [RochesterHillsPrecinct26] for shifting 187 votes.
+MARKING AN X ON [SouthfieldTownshipPrecinct3] for shifting 70 votes.
+MARKING AN X ON [NoviPrecinct16] for shifting 157 votes.
+MARKING AN X ON [BirminghamPrecinct7] for shifting 198 votes.
+MARKING AN X ON [NoviPrecinct21] for shifting 169 votes.
+MARKING AN X ON [RoyalOakPrecinct14] for shifting 150 votes.
+MARKING AN X ON [BloomfieldHillsPrecinct2] for shifting 155 votes.
+MARKING AN X ON [TroyPrecinct19] for shifting 146 votes.
+MARKING AN X ON [SouthfieldTownshipPrecinct6] for shifting 205 votes.
+MARKING AN X ON [SouthfieldTownshipPrecinct4] for shifting 133 votes.
+MARKING AN X ON [BirminghamPrecinct6] for shifting 225 votes.
+MARKING AN X ON [BloomfieldTownshipPrecinct18] for shifting 219 votes.
+MARKING AN X ON [BloomfieldTownshipPrecinct10] for shifting 188 votes.
+MARKING AN X ON [BirminghamPrecinct1] for shifting 203 votes.
+MARKING AN X ON [BirminghamPrecinct2] for shifting 215 votes.
+MARKING AN X ON [BirminghamPrecinct5] for shifting 227 votes.
+MARKING AN X ON [BirminghamPrecinct4] for shifting 268 votes.
+MARKING AN X ON [BloomfieldTownshipPrecinct16] for shifting 412 votes.
+MARKING AN X ON [LakeAngelusPrecinct1] for shifting 38 votes.
+finalConclusion = THE BLACK X'S (SORTED TO THE RIGHT) MARK 71 BIGGEST SPOTS OF THEFT OVER 4% WORTH 9463 VOTES. SEE LOG FOR LOCALITY NAMES.
+Note that all items omitted above affect the CSV as well as the PNG.
