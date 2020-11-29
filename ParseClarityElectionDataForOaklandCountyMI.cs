@@ -23,7 +23,7 @@
  * as was described for Milwaukee County Wisconsin in an article at:
  * https://www.thegatewaypundit.com/2020/11/caught-part-3-impossible-ballot-ratio-found-milwaukee-results-change-wisconsin-election-30000-votes-switched-president-trump-biden/
  * 
- * finalConclusion = X MARKS 14 SPOTS OF THEFT WORTH 2922 VOTES. SEE LOG FOR LOCALITY NAMES.
+ * finalConclusion = THE BLACK X'S (SORTED TO THE RIGHT) MARK 71 BIGGEST SPOTS OF THEFT OVER 4% WORTH 9463 VOTES. SEE LOG FOR LOCALITY NAMES.
  * 
  * 
  * There is a series of similar programs building upon one another,
